@@ -16,13 +16,13 @@ namespace THA_W5_MEGAN_R
         {
             InitializeComponent();
         }
+        List<Product> bubu = new List<Product>(); //LIST PRODUK
+        List<string> bebe = new List<string>(); //LIST KATEGORI
         int counting = 0;
         int idNum = 0;
         DataTable dtProdukSimpan = new DataTable();
         DataTable dtProdukTampil = new DataTable();
         DataTable dtCategory = new DataTable(); 
-        List<Product> products = new List<Product>();
-        List<string> categories = new List<string>();
         private void Form1_Load(object sender, EventArgs e)
         {
             this.BackColor = Color.Coral;
@@ -40,20 +40,20 @@ namespace THA_W5_MEGAN_R
             dtProdukTampil.Columns.Add("Harga");
             dtProdukTampil.Columns.Add("Stock");
             dtProdukTampil.Columns.Add("ID Category");
-            products.Add(new Product("Jas Hitam", "100000", "10", "Jas"));
-            products.Add(new Product("T-Shirt Black Pink", "70000", "20", "T-Shirt"));
-            products.Add(new Product("T-Shirt Obsessive", "75000", "16", "T-Shirt"));
-            products.Add(new Product("Rok Mini", "82000", "26", "Rok"));
-            products.Add(new Product("Jeans Biru", "90000", "5", "Celana"));
-            products.Add(new Product("Celana Pendek Coklat", "60000", "14", "Celana"));
-            products.Add(new Product("Cawat Blink-Blink", "100000", "1", "Cawat"));
-            products.Add(new Product("Rocca Shirt", "50000", "8", "T-Shirt"));
+            bubu.Add(new Product("Jas Hitam", "100000", "10", "Jas"));
+            bubu.Add(new Product("T-Shirt Black Pink", "70000", "20", "T-Shirt"));
+            bubu.Add(new Product("T-Shirt Obsessive", "75000", "16", "T-Shirt"));
+            bubu.Add(new Product("Rok Mini", "82000", "26", "Rok"));
+            bubu.Add(new Product("Jeans Biru", "90000", "5", "Celana"));
+            bubu.Add(new Product("Celana Pendek Coklat", "60000", "14", "Celana"));
+            bubu.Add(new Product("Cawat Blink-Blink", "100000", "1", "Cawat"));
+            bubu.Add(new Product("Rocca Shirt", "50000", "8", "T-Shirt"));
 
-            foreach (Product product in products)
+            foreach (Product product in bubu)
             {
-                if (!categories.Contains(product.Category))
+                if (bebe.Contains(product.Category) == false)
                 {
-                    categories.Add(product.Category);
+                    bebe.Add(product.Category);
                     counting++;
                     dtCategory.Rows.Add("C" + counting, product.Category);
                 }
@@ -61,7 +61,7 @@ namespace THA_W5_MEGAN_R
 
             for (int i = 65; i <= 90; i++)
             {
-                foreach (Product product in products)
+                foreach (Product product in bubu)
                 {
                     if (product.Name[0] == Convert.ToChar(i))
                     {
@@ -71,18 +71,16 @@ namespace THA_W5_MEGAN_R
                 }
                 idNum = 0;
             }
-
-            foreach (Product product in products)
+            for (int i = 0; i < dtCategory.Rows.Count; i++)
+            {
+                comboBox_cat.Items.Add(dtCategory.Rows[i][1].ToString());
+            }
+            foreach (Product product in bubu)
             {
                 product.CategoryID = generateIDcat(product);
                 dtProdukSimpan.Rows.Add(product.IDProduct, product.Name, product.Harga, product.Stock, product.CategoryID);
             }
             comboBox_data.Enabled = false;
-
-            for (int i = 0; i < dtCategory.Rows.Count; i++)
-            {
-                comboBox_cat.Items.Add(dtCategory.Rows[i][1].ToString());
-            }
         }
         private string generateIDprod(Product product)
         {
@@ -91,9 +89,9 @@ namespace THA_W5_MEGAN_R
             {
                 if (product.Name[0] == Convert.ToChar(i))
                 {
-                    foreach (Product produk in products)
+                    foreach (Product produck in bubu)
                     {
-                        if (produk.Name[0] == product.Name[0])
+                        if (produck.Name[0] == product.Name[0])
                         {
                             idNum++;
                         }
@@ -152,7 +150,7 @@ namespace THA_W5_MEGAN_R
         {
             dgvProdukSimpan.DataSource = dtProdukTampil;
             dtProdukTampil.Rows.Clear();
-            foreach (Product product in products)
+            foreach (Product product in bubu)
             {
                 for (int i = 0; i < dtProdukSimpan.Rows.Count; i++)
                 {
@@ -172,7 +170,8 @@ namespace THA_W5_MEGAN_R
             else
             {
                 Product product = new Product(textBox_nameDet.Text, textBox_hargaDet.Text, textBox_stockDet.Text, comboBox_cat.Text);
-                products.Add(product);
+                bubu.Add(product);
+
                 product.IDProduct = generateIDprod(product);
                 product.CategoryID = generateIDcat(product);
                 dtProdukSimpan.Rows.Add(product.IDProduct, product.Name, product.Harga, product.Stock, product.CategoryID);
@@ -190,20 +189,20 @@ namespace THA_W5_MEGAN_R
             }
             else
             {
-                int index = dgvProdukSimpan.CurrentCell.RowIndex;
-                string productName = dtProdukSimpan.Rows[index][1].ToString();
-                foreach (Product product in products)
+                int check = dgvProdukSimpan.CurrentCell.RowIndex;
+                string productName = dtProdukSimpan.Rows[check][1].ToString();
+                foreach (Product product in bubu)
                 {
                     if (productName == product.Name)
                     {
-                        product.Name = textBox_nameDet.Text;
+                        product.Name = textBox_nameDet.Text; //NGEDIT NAMA
                         product.Category = comboBox_cat.Text;
                         product.Harga = textBox_hargaDet.Text;
                         product.Stock = textBox_stockDet.Text;
                         product.IDProduct = generateIDprod(product);
                         product.CategoryID = generateIDcat(product);
                         dtProdukSimpan.Rows.Clear();
-                        foreach (Product produk in products)
+                        foreach (Product produk in bubu)
                         {
                             dtProdukSimpan.Rows.Add(produk.IDProduct, produk.Name, produk.Harga, produk.Stock, produk.CategoryID);
                         }
@@ -218,7 +217,8 @@ namespace THA_W5_MEGAN_R
         private void dgvProdukSimpan_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
             int index = dgvProdukSimpan.CurrentCell.RowIndex;
-            foreach (Product product in products)
+
+            foreach (Product product in bubu)
             {
                 if (dgvProdukSimpan.CurrentRow.Cells["Nama Product"].Value.ToString() == product.Name)
                 {
@@ -232,6 +232,7 @@ namespace THA_W5_MEGAN_R
         private void butt_removeCategory_Click(object sender, EventArgs e)
         {
             int index = dgvProdukSimpan.CurrentCell.RowIndex;
+
             string removedCatID = dtCategory.Rows[index][0].ToString();
             for (int i = 0; i < dtProdukSimpan.Rows.Count; i++)
             {
