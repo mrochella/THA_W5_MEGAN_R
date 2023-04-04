@@ -16,10 +16,10 @@ namespace THA_W5_MEGAN_R
         {
             InitializeComponent();
         }
-        List<Product> bubu = new List<Product>(); //LIST PRODUK
-        List<string> bebe = new List<string>(); //LIST KATEGORI
         int counting = 0;
         int idNum = 0;
+        List<Product> bubu = new List<Product>(); //LIST PRODUK
+        List<string> bebe = new List<string>(); //LIST KATEGORI
         DataTable dtProdukSimpan = new DataTable();
         DataTable dtProdukTampil = new DataTable();
         DataTable dtCategory = new DataTable(); 
@@ -117,13 +117,14 @@ namespace THA_W5_MEGAN_R
         private void butt_addCategory_Click(object sender, EventArgs e)
         {
             counting++;
-            if (textBox_nameCat.Text == "")
+            if (string.IsNullOrEmpty(textBox_nameCat.Text) == false)
             {
-                MessageBox.Show("Pls add a category name.", "OOPS!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                dtCategory.Rows.Add("C" + counting, textBox_nameCat.Text);
             }
             else
             {
-                dtCategory.Rows.Add("C" + counting, textBox_nameCat.Text);
+                string msg = "Pls add category's name!";
+                MessageBox.Show(msg);
             }
             comboBox_cat.Items.Clear();
             for (int i = 0; i < dtCategory.Rows.Count; i++)
@@ -163,9 +164,10 @@ namespace THA_W5_MEGAN_R
         }
         private void butt_addProduct_Click(object sender, EventArgs e)
         {
-            if (textBox_nameDet.Text == "" || textBox_hargaDet.Text == "" || textBox_stockDet.Text == "" || comboBox_cat.Text == "")
+            if (string.IsNullOrEmpty(textBox_nameDet.Text) == true || string.IsNullOrEmpty(textBox_hargaDet.Text) == true || string.IsNullOrEmpty(textBox_stockDet.Text) == true || string.IsNullOrEmpty(comboBox_cat.Text) == true)
             {
-                MessageBox.Show("Pls fill all the text boxes.", "OOPS!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                string msg = "Pls fill all the text boxes!";
+                MessageBox.Show(msg);
             }
             else
             {
@@ -183,9 +185,10 @@ namespace THA_W5_MEGAN_R
         }
         private void butt_editProduct_Click(object sender, EventArgs e)
         {
-            if (textBox_nameDet.Text == "" || textBox_hargaDet.Text == "" || textBox_stockDet.Text == "" || comboBox_cat.Text == "")
+            if (string.IsNullOrEmpty(textBox_nameDet.Text) == true || string.IsNullOrEmpty(textBox_hargaDet.Text) == true || string.IsNullOrEmpty(textBox_stockDet.Text) == true || string.IsNullOrEmpty(comboBox_cat.Text) == true)
             {
-                MessageBox.Show("Pls fill all the text boxes.", "OOPS!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                string msg = "Pls fill all the text boxes!";
+                MessageBox.Show(msg);
             }
             else
             {
@@ -217,7 +220,6 @@ namespace THA_W5_MEGAN_R
         private void dgvProdukSimpan_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
             int index = dgvProdukSimpan.CurrentCell.RowIndex;
-
             foreach (Product product in bubu)
             {
                 if (dgvProdukSimpan.CurrentRow.Cells["Nama Product"].Value.ToString() == product.Name)
@@ -232,7 +234,6 @@ namespace THA_W5_MEGAN_R
         private void butt_removeCategory_Click(object sender, EventArgs e)
         {
             int index = dgvProdukSimpan.CurrentCell.RowIndex;
-
             string removedCatID = dtCategory.Rows[index][0].ToString();
             for (int i = 0; i < dtProdukSimpan.Rows.Count; i++)
             {
